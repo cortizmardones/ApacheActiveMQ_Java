@@ -19,7 +19,7 @@ public class App {
 			"  	<estadoSoa>RECIBIDO_OK</estadoSoa>\r\n" + 
 			"  	<documentos>\r\n" + 
 			"  		<documento>\r\n" + 
-			"  			<id>848498255</id>\r\n" + 
+			"  			<id>8498255</id>\r\n" + 
 			"  		</documento>\r\n" + 
 			"  		 <documento>\r\n" + 
 			"  			<id>10287156</id>\r\n" + 
@@ -31,38 +31,47 @@ public class App {
 			"</SolicitudOrdenes>";
 
 	public static void main(String[] args) throws JAXBException {
+		
+		System.out.println("********** Inicio ejecucción **********");
 
 		MessageCreator messageCreator = new MessageCreator();
 
 		// Simulo muchos mensajes
-//    	for(int i = 0 ; i < 1 ; i++) {
-//    		messageCreator.sendMessage(MENSAJE);
-//    	}
+    	for(int i = 0 ; i < 15 ; i++) {
+    		messageCreator.sendMessage(MENSAJE);
+    	}
 
-		messageCreator.sendMessage(MENSAJE);
+		//messageCreator.sendMessage(MENSAJE);
 		messageCreator.readMessage();
 
 		ArrayList<String> listaObject = messageCreator.traerMensajes();
 		String mensajeCasteado = listaObject.get(0).toString();
+		
+		for(String lista: listaObject) {
+			try {
+				
+				JAXBContext context2 = JAXBContext.newInstance(SolicitudOrdenes.class);
+				Unmarshaller unmarshaller2 = context2.createUnmarshaller();
+				//SolicitudOrdenes solicitudOrdenes = (SolicitudOrdenes) unmarshaller2.unmarshal(new File("src/main/java/SolicitudOrdenes.xml"));
+				SolicitudOrdenes solicitudOrdenes = (SolicitudOrdenes) unmarshaller2.unmarshal(new StringReader(lista));
+				
+				System.out.println("********** Datos como objeto Unmarshall **********");
+				
+				System.out.println("Código Comprador (Proveedor): " + solicitudOrdenes.getCodcomprador());
+				System.out.println("Código Proveedor (Retail): " + solicitudOrdenes.getCodproveedor());
+				System.out.println("Nombre Portal : " + solicitudOrdenes.getNombreportal());
+				System.out.println("Fecha Activación: " + solicitudOrdenes.getFechaActivacion());
+				System.out.println("Estado SOA: " + solicitudOrdenes.getEstadoSoa());
+				System.out.println("Documentos: " + solicitudOrdenes.getDocumentos().getDocumento()[0].getId());
 
-		try {
-			
-			JAXBContext context2 = JAXBContext.newInstance(SolicitudOrdenes.class);
-			Unmarshaller unmarshaller2 = context2.createUnmarshaller();
-			//SolicitudOrdenes solicitudOrdenes = (SolicitudOrdenes) unmarshaller2.unmarshal(new File("src/main/java/SolicitudOrdenes.xml"));
-			SolicitudOrdenes solicitudOrdenes = (SolicitudOrdenes) unmarshaller2.unmarshal(new StringReader(mensajeCasteado));
-			System.out.println(solicitudOrdenes.getCodcomprador());
-			System.out.println(solicitudOrdenes.getCodproveedor());
-			System.out.println(solicitudOrdenes.getNombreportal());
-			System.out.println(solicitudOrdenes.getFechaActivacion());
-			System.out.println(solicitudOrdenes.getEstadoSoa());
-			System.out.println(solicitudOrdenes.getDocumentos().getDocumento()[0].getId());
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 
-		System.out.println("Fin ejecucción");
+
+
+		System.out.println("********** Fin ejecucción **********");
 
 	}
 }
