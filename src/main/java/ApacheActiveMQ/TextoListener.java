@@ -1,11 +1,15 @@
 package ApacheActiveMQ;
 
+import java.util.ArrayList;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 public class TextoListener implements MessageListener {
+	
+	private ArrayList<String> listaMensajes = new ArrayList<String>();
 
 	public void onMessage(Message message) {
 		
@@ -15,7 +19,8 @@ public class TextoListener implements MessageListener {
 			
 			if (message instanceof TextMessage) {
 				msg = (TextMessage) message;
-				System.out.println("Recibido asincrono [" + msg.getText() + "]");
+				System.out.println("Recibido asíncrono [" + msg.getText() + "]");
+				listaMensajes.add(msg.getText());
 			} else {
 				System.err.println("El mensaje no es de tipo texto");
 			}
@@ -27,6 +32,10 @@ public class TextoListener implements MessageListener {
 		}
 		
 		
+	}
+	
+	public ArrayList<String> traerMensajes(){
+		return this.listaMensajes;
 	}
 
 }

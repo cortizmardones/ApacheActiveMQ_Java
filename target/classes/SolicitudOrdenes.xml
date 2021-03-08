@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SolicitudOrdenes>
+ 	<codproveedor>93830000</codproveedor>
+  	<codcomprador>codcomprador</codcomprador>
+  	<nombreportal>nombreportal</nombreportal>
+  	<fecha_activacion>2019-07-01 00:00:00</fecha_activacion>
+  	<estadoSoa>RECIBIDO_OK</estadoSoa>
+  	<documentos>
+  		<documento>
+  			<id>10287149</id>
+  		</documento>
+  		 <documento>
+  			<id>10287156</id>
+  		</documento>
+  		 <documento>
+  			<id>10287155</id>
+  		</documento>
+  	</documentos>
+</SolicitudOrdenes>

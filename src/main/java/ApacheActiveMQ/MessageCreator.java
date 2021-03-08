@@ -1,5 +1,7 @@
 package ApacheActiveMQ;
 
+import java.util.ArrayList;
+
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
@@ -18,6 +20,8 @@ public class MessageCreator{
 	private static final String PASSWORD = "admin";
 	private static final String MY_QUEUE = "QL_MESSAGE_JAVA";
 	private static final boolean TRANSACTED_SESSION = false;
+	
+	private ArrayList<String> listaMensajesMC = new ArrayList<String>();
 
 	public void sendMessage(String mensaje) {
 		try {
@@ -77,6 +81,9 @@ public class MessageCreator{
 			TextoListener listener = new TextoListener();
 			messageConsumer.setMessageListener(listener);
 		    connection.start();
+		    
+		    listaMensajesMC = listener.traerMensajes();
+		   
 			
 //			Forma Sincrona			
 //			TextMessage message = (TextMessage) messageConsumer.receive();
@@ -87,5 +94,10 @@ public class MessageCreator{
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	
+	public ArrayList<String> traerMensajes() {
+		return this.listaMensajesMC;
 	}
 }
