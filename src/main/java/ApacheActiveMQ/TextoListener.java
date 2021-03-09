@@ -35,7 +35,7 @@ public class TextoListener implements MessageListener {
 	}
 	
 	public ArrayList<String> traerMensajes(){
-		return this.listaMensajes;
+		return listaMensajes;
 	}
 
 }
