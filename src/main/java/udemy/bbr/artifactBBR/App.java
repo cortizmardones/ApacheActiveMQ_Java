@@ -3,6 +3,8 @@ package udemy.bbr.artifactBBR;
 import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -46,15 +48,18 @@ public class App {
 		MessageCreator messageCreator = new MessageCreator();
 
 		// Simulo muchos mensajes
-//    	for(int i = 0 ; i < 15 ; i++) {
-//    		messageCreator.sendMessage(MENSAJE);
-//    	}
+    	for(int i = 0 ; i < 15 ; i++) {
+    		messageCreator.sendMessage(MENSAJE);
+    	}
 
-		messageCreator.sendMessage(MENSAJE);
+		//messageCreator.sendMessage(MENSAJE);
 		messageCreator.readMessage();
 
 		ArrayList<String> listaObject = messageCreator.traerMensajes();
 		//String mensajeCasteado = listaObject.get(0).toString();
+		
+		//Este cont es para dar nombres distintos a los archivos excel y no sobreescribir al regenerar la misma instancia y sobreescribir el archivo excel al llamarse igual.
+		int cont = 0;
 		
 		for(String lista: listaObject) {
 			try {
@@ -121,18 +126,24 @@ public class App {
 					cellFechaActivacion.setCellValue(solicitudOrdenes.getFechaActivacion());
 					cellEstadoSoa.setCellValue(solicitudOrdenes.getEstadoSoa());
 					cellIdDocumento.setCellValue(Double.parseDouble(solicitudOrdenes.getDocumentos().getDocumento()[0].getId()));
+					hoja.autoSizeColumn(i);
 				}
+				
 								
 				try {
-					   FileOutputStream elFichero = new FileOutputStream("Excel_Solicitud_Ordenes.xls");
-					   libro.write(elFichero);
-					   elFichero.close();
-					} catch (Exception e) {
-					   e.printStackTrace();
-					   System.out.println("Error : " + e.getMessage());
-					}
+					
+					
+					cont = cont + 1;
+					
+					FileOutputStream elFichero = new FileOutputStream("Excel_número_" + cont + "_Solicitud_Ordenes.xls");
+					libro.write(elFichero);
+					elFichero.close();
+					System.out.println("Archivo Excel Generado");
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("Error : " + e.getMessage());
+				}
 				
-
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
