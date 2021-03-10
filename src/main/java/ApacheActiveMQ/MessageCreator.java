@@ -13,14 +13,14 @@ import javax.jms.TextMessage;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-public class MessageCreator{
+public class MessageCreator {
 
 	private static final String URL = ActiveMQConnection.DEFAULT_BROKER_URL;
 	private static final String USER = "admin";
 	private static final String PASSWORD = "admin";
 	private static final String MY_QUEUE = "QL_MESSAGE_JAVA";
 	private static final boolean TRANSACTED_SESSION = false;
-	
+
 	private ArrayList<String> listaMensajesMC = new ArrayList<String>();
 
 	public void sendMessage(String mensaje) {
@@ -44,15 +44,15 @@ public class MessageCreator{
 
 			// Genero el mensaje (texto) a enviar
 			TextMessage textMessage = session.createTextMessage(mensaje);
-			
-			//Agregandole propiedades manualmente
-			textMessage.setBooleanProperty("VeV",false);
+
+			// Agregandole propiedades manualmente
+			textMessage.setBooleanProperty("VeV", false);
 			textMessage.setIntProperty("Cantidad", 55);
 			textMessage.setDoubleProperty("Precio", 100.0);
-			
-			//Enviando el mensaje
+
+			// Enviando el mensaje
 			messageProducer.send(textMessage);
-			//session.commit();
+			// session.commit();
 			session.close();
 
 		} catch (JMSException e) {
@@ -66,7 +66,7 @@ public class MessageCreator{
 			// Se crea la coneción para empezar la mensajeria
 			ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(USER, PASSWORD, URL);
 			Connection connection = activeMQConnectionFactory.createConnection();
-			connection.start();
+			// connection.start();
 
 			// Se crea la session
 			Session session = connection.createSession(TRANSACTED_SESSION, Session.AUTO_ACKNOWLEDGE);
@@ -76,28 +76,32 @@ public class MessageCreator{
 
 			// Consumidor del mensaje
 			MessageConsumer messageConsumer = session.createConsumer(destination);
-			
-			//Forma asincrona
-			TextoListener listener = new TextoListener();
-			messageConsumer.setMessageListener(listener);
-		    connection.start();
-		    
-		    listaMensajesMC = listener.traerMensajes();
-		   
-			
-//			Forma Sincrona			
-//			TextMessage message = (TextMessage) messageConsumer.receive();
-//			session.close();
-//		    System.out.println(message.getText());
-			
+
+			// Forma asincrona
+//			TextoListener listener = new TextoListener();
+//			messageConsumer.setMessageListener(listener);
+//		    connection.start();
+//		    listaMensajesMC = listener.getListaMensajes();
+
+//			Forma Sincrona
+			connection.start();
+			TextMessage message = (TextMessage) messageConsumer.receive();
+			System.out.println("Mensaje Sincrono: " + message.getText());
+			listaMensajesMC.add(message.getText());
+			session.close();
+
 		} catch (JMSException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
 	}
-	
-	
-	public ArrayList<String> traerMensajes() {
-		return this.listaMensajesMC;
+
+	public ArrayList<String> getListaMensajesMC() {
+		return listaMensajesMC;
 	}
+
+	public void setListaMensajesMC(ArrayList<String> listaMensajesMC) {
+		this.listaMensajesMC = listaMensajesMC;
+	}
+
 }
